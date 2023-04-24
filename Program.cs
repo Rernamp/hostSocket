@@ -18,7 +18,7 @@ namespace Application {
 
             Console.WriteLine(res);
 
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[2048];
             int numberRepeat = data[1] + 1;
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -38,6 +38,8 @@ namespace Application {
                 }
             }
             watch.Stop();
+
+            res = socket.Send(data, SocketFlags.None);
 
             Console.WriteLine($"Time ns: {watch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L))}");
 
