@@ -5,21 +5,25 @@ namespace Application {
     using System.Diagnostics;
     using System;
     using System.Runtime.CompilerServices;
+    using System.Text;
 
     class Program {
         static void Main(string[] args) {
-            
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            using TcpClient tcpClient = new TcpClient();
+            var server = "www.google.com";
             string ip = "192.168.3.21";
-            socket.Connect(IPAddress.Parse(ip), 80);
-            
+
+            tcpClient.ConnectAsync(IPAddress.Parse(ip), 80).Wait();
+            // получаем поток для взаимодействия с сервером
+            NetworkStream stream = tcpClient.GetStream();
+
             const byte magicValue = 0xE6;
 
             byte[] data = { magicValue, 0 };
 
             var recBuffer = new byte[1];
 
-            var sizeRec = socket.Receive(recBuffer);
+            var sizeRec = stream.Read(recBuffer);
 
             if (sizeRec == 1) {
                 if (recBuffer[0] != magicValue) {
@@ -27,21 +31,19 @@ namespace Application {
                 }
             }
 
-            var res = socket.Send(data, SocketFlags.None);
-
-            Console.WriteLine(res);
+            stream.Write(data, 0, data.Count());
 
             byte[] buffer = new byte[2048];
             int numberRepeat = 255;
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
 
-            var stream = File.CreateText("damp.txt");
+            var streamFile = File.CreateText("damp.txt");
 
 
             while (numberRepeat != 0) {
                 
-                var size = socket.Receive(buffer);
+                var size = stream.Read(buffer);
                 if (size != 0)
                 {
                     numberRepeat--;
@@ -53,7 +55,7 @@ namespace Application {
                     //    dataValue = (Int16)BitConverter.ToUInt16(buffer, (i * sizeof(UInt16)));
                     //    Console.Write(dataValue.ToString());
                     //    Console.Write("  ");
-                    //    stream.WriteLine(dataValue.ToString());
+                    //    streamFile.WriteLine(dataValue.ToString());
                     //}
 
                     for (int i = 0; i < size; i++) {
@@ -66,11 +68,9 @@ namespace Application {
             }
             watch.Stop();
 
-            res = socket.Send(data, SocketFlags.None);
-
             Console.WriteLine($"Time ns: {watch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L))}");
 
-            socket.Close();
+            tcpClient.Close();
 
             Thread.Sleep(1000);
         }
