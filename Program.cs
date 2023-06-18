@@ -18,7 +18,7 @@ namespace Application {
 
             const byte magicValue = 0xE6;
 
-            byte[] data = { magicValue, 1 };
+            byte[] data = { magicValue, 2 , 0b1111, 0};
 
             var recBuffer = new byte[1];
 
