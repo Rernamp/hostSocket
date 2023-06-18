@@ -10,7 +10,6 @@ namespace Application {
     class Program {
         static void Main(string[] args) {
             using TcpClient tcpClient = new TcpClient();
-            var server = "www.google.com";
             string ip = "192.168.3.21";
 
             tcpClient.ConnectAsync(IPAddress.Parse(ip), 80).Wait();
@@ -19,7 +18,7 @@ namespace Application {
 
             const byte magicValue = 0xE6;
 
-            byte[] data = { magicValue, 0 };
+            byte[] data = { magicValue, 1 };
 
             var recBuffer = new byte[1];
 
@@ -34,7 +33,7 @@ namespace Application {
             stream.Write(data, 0, data.Count());
 
             byte[] buffer = new byte[2048];
-            int numberRepeat = 255;
+            int numberRepeat = 1024;
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
 
@@ -51,16 +50,16 @@ namespace Application {
 
                     Int16 dataValue = 0;
 
-                    //for (var i = 0; i < size / 2; i++) {
-                    //    dataValue = (Int16)BitConverter.ToUInt16(buffer, (i * sizeof(UInt16)));
-                    //    Console.Write(dataValue.ToString());
-                    //    Console.Write("  ");
-                    //    streamFile.WriteLine(dataValue.ToString());
-                    //}
-
-                    for (int i = 0; i < size; i++) {
-                        Console.WriteLine($"data: {buffer[i]}");
+                    for (var i = 0; i < size / 2; i++) {
+                        dataValue = (Int16)BitConverter.ToUInt16(buffer, (i * sizeof(UInt16)));
+                        Console.Write(dataValue.ToString());
+                        Console.Write("  ");
+                        streamFile.WriteLine(dataValue.ToString());
                     }
+
+                    //for (int i = 0; i < size; i++) {
+                    //    Console.WriteLine($"data: {buffer[i]}");
+                    //}
                     Console.WriteLine($"New Data {numberRepeat}; Size: {size}");
                 } else {
                     Console.WriteLine("empty packet");
