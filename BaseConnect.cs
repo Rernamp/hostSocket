@@ -39,7 +39,7 @@ namespace hostSocket {
 
         public abstract void Connect(NetworkStream stream, StreamWriter fileStream);
         public TcpClient tcpClient = new TcpClient();
-        private const string ip = "192.168.3.21";
+        private const string ip = "192.168.3.27";
         private const int port = 80;
         protected const byte magicValue = 0xE6;
         protected static async Task WriteStringToFile(StreamWriter stream, string data) {
