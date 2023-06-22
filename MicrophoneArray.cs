@@ -31,12 +31,22 @@ namespace hostSocket {
                 var size = stream.Read(buffer);
                 if (size != 0) {
 
-                    float dataValue = 0;
-                    for (var i = 0; i < size / sizeof(float); i++) {
-                        dataValue = (float)BitConverter.ToSingle(buffer, (i * sizeof(float)));
+                    if (type == TypeProcessing.AdaptiveAlgoritm) {
+                        float dataValue = 0;
+                        for (var i = 0; i < size / sizeof(float); i++) {
+                            dataValue = (float)BitConverter.ToSingle(buffer, (i * sizeof(float)));
 
-                        WriteStringToFile(fileStream, dataValue.ToString()).Wait();
+                            WriteStringToFile(fileStream, dataValue.ToString().Replace(",", ".")).Wait();
+                        }
+                    } else {
+                        Int16 dataValue = 0;
+                        for (var i = 0; i < size / sizeof(Int16); i++) {
+                            dataValue = (Int16)BitConverter.ToInt16(buffer, (i * sizeof(Int16)));
+
+                            WriteStringToFile(fileStream, dataValue.ToString()).Wait();
+                        }
                     }
+                    
                     numberRepeat -= size;
                 }
                 Console.WriteLine($"New Data with size: {size}");
