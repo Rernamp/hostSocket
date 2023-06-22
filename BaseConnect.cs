@@ -34,6 +34,7 @@ namespace hostSocket {
             Connect(stream, streamFile);
 
             tcpClient.Close();
+            streamFile.Close();
         }
 
         public abstract void Connect(NetworkStream stream, StreamWriter fileStream);
