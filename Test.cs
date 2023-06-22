@@ -19,7 +19,7 @@ namespace hostSocket {
 
             byte[] buffer = new byte[2048];
 
-            while (numberRepeat != 0) {
+            while (numberRepeat >= 0) {
                 var size = stream.Read(buffer);
                 if (size != 0) {
                     for (int i = 0; i < size; i++) {
