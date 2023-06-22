@@ -26,6 +26,9 @@ namespace hostSocket {
             stream.Write(data, 0, data.Count());
 
             byte[] buffer = new byte[2048];
+            if (type == TypeProcessing.AdaptiveAlgoritm) {
+                numberRepeat *= sizeof(float);
+            }
 
             while (numberRepeat >= 0) {
                 var size = stream.Read(buffer);
