@@ -28,6 +28,8 @@ namespace hostSocket {
             byte[] buffer = new byte[2048];
             if (type == TypeProcessing.AdaptiveAlgoritm) {
                 numberRepeat *= sizeof(float);
+            } else {
+                WriteStringToFile(fileStream, numberMicrophone.ToString()).Wait();
             }
 
             while (numberRepeat >= 0) {

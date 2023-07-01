@@ -8,6 +8,8 @@ temp = [];
 %%
 numberElements = data(1);
 
+numberElements = sum(bitget(numberElements, 1:4));
+
 data = data(2:end);
 
 data = data(1:fix(length(data) / numberElements) * numberElements);
